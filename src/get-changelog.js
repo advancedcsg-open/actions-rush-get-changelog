@@ -23,7 +23,7 @@ const changeTypeMeta = [
  * @returns {RushJson|null} - The parsed rush.json or null if not found
  */
 function findRushJson(rushRootPath) {
-  const rushJsonPath = path.resolve(rushRootPath, 'rush.json')
+  const rushJsonPath = path.join(rushRootPath, 'rush.json')
 
   if (!fileExists(rushJsonPath)) {
     throw new Error(`Cannot detect rush.json file at ${rushJsonPath}. Please ensure the working-directory input points to the directory containing rush.json, or that rush.json exists in the repository root.`)
@@ -51,7 +51,7 @@ function findProjectFolder(projectName, rushRootPath) {
     throw new Error(`Project with name "${projectName}" not found in rush.json`)
   }
   
-  return path.resolve(rushRootPath, project.projectFolder)
+  return path.join(rushRootPath, project.projectFolder)
 }
 
 /**
