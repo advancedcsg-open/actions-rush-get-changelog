@@ -153,18 +153,6 @@ function convertToMarkdown(changelogEntry, projectName) {
     }
   })
   
-  // Add any remaining 'other' changes that weren't in the predefined types
-  const otherChanges = changesByType.other
-  if (otherChanges && otherChanges.length > 0) {
-    const otherMeta = changeTypeMeta.find(m => m.type === 'other')
-    markdown += `## ${otherMeta.emoji} Other\n\n`
-    otherChanges.forEach(change => {
-      const breakingPrefix = change.isBreaking ? '**BREAKING**: ' : ''
-      markdown += `- ${breakingPrefix}${change.subject}\n`
-    })
-    markdown += '\n'
-  }
-  
   return markdown.trim()
 }
 
