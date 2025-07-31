@@ -1,0 +1,22 @@
+{
+  "name": "@advanced/example-2",
+  "entries": [
+    {
+      "version": "1.2.0",
+      "tag": "@advanced/example-2_v1.2.0",
+      "date": "Thu, 09 Dec 2021 12:30:45 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "feat: Added support for custom themes"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "docs: Updated README with examples"
+          }
+        ]
+      }
+    }
+  ]
+}

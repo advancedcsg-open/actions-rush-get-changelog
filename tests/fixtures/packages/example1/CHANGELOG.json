@@ -1,0 +1,49 @@
+{
+  "name": "@advanced/example-1",
+  "entries": [
+    {
+      "version": "0.8.13",
+      "tag": "@advanced/example-1_v0.8.13",
+      "date": "Wed, 08 Dec 2021 08:44:31 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix: Updated component to handle edge cases better"
+          },
+          {
+            "comment": "fix: Fixed memory leak in event listeners"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.8.12",
+      "tag": "@advanced/example-1_v0.8.12",
+      "date": "Mon, 06 Dec 2021 14:22:15 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "feat: Added new validation feature"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "fix: Resolved issue with undefined values"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.8.11",
+      "tag": "@advanced/example-1_v0.8.11",
+      "date": "Fri, 03 Dec 2021 10:15:30 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "feat!: Breaking change - restructured API"
+          }
+        ]
+      }
+    }
+  ]
+}

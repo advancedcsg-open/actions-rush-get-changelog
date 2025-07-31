@@ -1,0 +1,19 @@
+name: 'RushJS Get Changelog'
+author: Paul Mowat
+description: 'Github action for getting changelog from rush'
+runs:
+  using: 'node20'
+  main: 'dist/main/index.js'
+branding:
+  icon: 'check'
+  color: 'gray-dark'
+inputs:
+  version:
+    description: 'The version of the changelog to retrieve'
+    required: true
+  projectName:
+    description: 'The name of the project to retrieve the changelog for'
+    required: true
+outputs:
+  markdown: # output will be available to future steps
+    description: 'Markdown formatted changelog for the specified version and project'
