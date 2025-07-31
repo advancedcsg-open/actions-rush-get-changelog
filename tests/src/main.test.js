@@ -23,12 +23,13 @@ describe('test runs', () => {
     actionsCore.getInput = jest.fn()
       .mockReturnValueOnce('0.8.13') // version
       .mockReturnValueOnce('@advanced/example-1') // project-name
+      .mockReturnValueOnce('') // working-directory (empty, so it will use process.cwd)
 
     const action = require('../../src/main')
     await action()
     
-    expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.stringContaining('# @advanced/example-1 v0.8.13'))
     expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.stringContaining('🐛 Fix'))
+    expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.not.stringContaining('# @advanced/example-1 v0.8.13'))
   })
 
   it('test action as module executes - failed with invalid project', async () => {
@@ -41,6 +42,7 @@ describe('test runs', () => {
     actionsCore.getInput = jest.fn()
       .mockReturnValueOnce('1.0.0') // version
       .mockReturnValueOnce('@advanced/non-existent') // project-name
+      .mockReturnValueOnce('') // working-directory
 
     const action = require('../../src/main')
     await action()
@@ -58,6 +60,7 @@ describe('test runs', () => {
     actionsCore.getInput = jest.fn()
       .mockReturnValueOnce('999.999.999') // version
       .mockReturnValueOnce('@advanced/example-1') // project-name
+      .mockReturnValueOnce('') // working-directory
 
     const action = require('../../src/main')
     await action()
