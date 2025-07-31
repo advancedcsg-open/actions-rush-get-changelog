@@ -22,8 +22,8 @@ const changeTypeMeta = [
  * @param {string} workingDirectory - The path to search for rush.json (defaults to current directory)
  * @returns {RushJson|null} - The parsed rush.json or null if not found
  */
-function findRushJson(workingDirectory) {
-  const rushJsonPath = path.resolve(workingDirectory, 'rush.json')
+function findRushJson(rushRootPath) {
+  const rushJsonPath = path.resolve(rushRootPath, 'rush.json')
 
   if (!fileExists(rushJsonPath)) {
     throw new Error(`Cannot detect rush.json file at ${rushJsonPath}. Please ensure the working-directory input points to the directory containing rush.json, or that rush.json exists in the repository root.`)
@@ -43,15 +43,15 @@ function findRushJson(workingDirectory) {
  * @param {string} workingDirectory - The path containing rush.json
  * @returns {string} - The absolute path to the project folder
  */
-function findProjectFolder(projectName, workingDirectory) {
-  const rushJson = findRushJson(workingDirectory)
+function findProjectFolder(projectName, rushRootPath) {
+  const rushJson = findRushJson(rushRootPath)
   const project = findProjectByName(rushJson, projectName)
   
   if (!project) {
     throw new Error(`Project with name "${projectName}" not found in rush.json`)
   }
   
-  return path.resolve(workingDirectory, project.projectFolder)
+  return path.resolve(rushRootPath, project.projectFolder)
 }
 
 /**
@@ -177,7 +177,7 @@ function convertToMarkdown(changelogEntry, projectName) {
  */
 async function getChangelog(options) {
   try {
-    const { projectName, version, workingDirectory = './' } = options
+    const { projectName, version, workingDirectory } = options
     
     if (!projectName) {
       throw new Error('Project name is required')
@@ -187,8 +187,10 @@ async function getChangelog(options) {
       throw new Error('Version is required')
     }
     
+    const rushRootPath = path.join(process.cwd(), workingDirectory || '.')
+
     // Find the project folder
-    const projectFolder = findProjectFolder(projectName, workingDirectory)
+    const projectFolder = findProjectFolder(projectName, rushRootPath)
     
     // Read the CHANGELOG.json
     const changelog = readChangelogJson(projectFolder)
