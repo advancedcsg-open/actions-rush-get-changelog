@@ -28,8 +28,8 @@ describe('test runs', () => {
     const action = require('../../src/main')
     await action()
     
-    expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.stringContaining('# @advanced/example-1 v0.8.13'))
     expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.stringContaining('🐛 Fix'))
+    expect(actionsCore.setOutput).toHaveBeenCalledWith('markdown', expect.not.stringContaining('# @advanced/example-1 v0.8.13'))
   })
 
   it('test action as module executes - failed with invalid project', async () => {

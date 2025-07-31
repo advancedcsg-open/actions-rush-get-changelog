@@ -21,11 +21,11 @@ describe('get-changelog', () => {
     const getChangelog = require('../../src/get-changelog')
     const markdown = await getChangelog(options)
     
-    expect(markdown).toContain('# @advanced/example-1 v0.8.13')
     expect(markdown).toContain('🐛 Fix')
     expect(markdown).toContain('Updated component to handle edge cases better')
     expect(markdown).toContain('Fixed memory leak in event listeners')
-    expect(markdown).toContain('Wed, 08 Dec 2021 08:44:31 GMT')
+    expect(markdown).not.toContain('# @advanced/example-1 v0.8.13')
+    expect(markdown).not.toContain('Wed, 08 Dec 2021 08:44:31 GMT')
   })
   
   it('should get changelog for a different version', async () => {
@@ -38,11 +38,11 @@ describe('get-changelog', () => {
     const getChangelog = require('../../src/get-changelog')
     const markdown = await getChangelog(options)
     
-    expect(markdown).toContain('# @advanced/example-1 v0.8.12')
     expect(markdown).toContain('🆕 Feat')
     expect(markdown).toContain('Added new validation feature')
     expect(markdown).toContain('🐛 Fix')
     expect(markdown).toContain('Resolved issue with undefined values')
+    expect(markdown).not.toContain('# @advanced/example-1 v0.8.12')
   })
   
   it('should handle breaking changes', async () => {
@@ -55,9 +55,9 @@ describe('get-changelog', () => {
     const getChangelog = require('../../src/get-changelog')
     const markdown = await getChangelog(options)
     
-    expect(markdown).toContain('# @advanced/example-1 v0.8.11')
     expect(markdown).toContain('🆕 Feat')
     expect(markdown).toContain('**BREAKING**: Breaking change - restructured API')
+    expect(markdown).not.toContain('# @advanced/example-1 v0.8.11')
   })
   
   it('should work with different project', async () => {
@@ -70,11 +70,11 @@ describe('get-changelog', () => {
     const getChangelog = require('../../src/get-changelog')
     const markdown = await getChangelog(options)
     
-    expect(markdown).toContain('# @advanced/example-2 v1.2.0')
     expect(markdown).toContain('🆕 Feat')
     expect(markdown).toContain('Added support for custom themes')
     expect(markdown).toContain('📖 Docs')
     expect(markdown).toContain('Updated README with examples')
+    expect(markdown).not.toContain('# @advanced/example-2 v1.2.0')
   })
   
   it('should throw error for non-existent project', async () => {

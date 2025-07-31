@@ -3500,8 +3500,7 @@ function extractVersionChangelog(changelog, version) {
  * @returns {string} - The markdown formatted changelog
  */
 function convertToMarkdown(changelogEntry, projectName) {
-  let markdown = `# ${projectName} v${changelogEntry.version}\n\n`
-  markdown += `*Released: ${changelogEntry.date}*\n\n`
+  let markdown = ''
   
   const changesByType = {}
   
@@ -3540,7 +3539,7 @@ function convertToMarkdown(changelogEntry, projectName) {
     })
   })
   
-  // Generate markdown sections for each type
+  // Generate markdown sections for each type in the defined order
   changeTypeMeta.forEach(meta => {
     const changes = changesByType[meta.type]
     if (changes && changes.length > 0) {
@@ -3553,12 +3552,14 @@ function convertToMarkdown(changelogEntry, projectName) {
     }
   })
   
-  // Add 'other' changes if any
+  // Add any remaining 'other' changes that weren't in the predefined types
   const otherChanges = changesByType.other
   if (otherChanges && otherChanges.length > 0) {
-    markdown += `## ${changeTypeMeta.find(m => m.type === 'other').emoji} Other\n\n`
+    const otherMeta = changeTypeMeta.find(m => m.type === 'other')
+    markdown += `## ${otherMeta.emoji} Other\n\n`
     otherChanges.forEach(change => {
-      markdown += `- ${change.subject}\n`
+      const breakingPrefix = change.isBreaking ? '**BREAKING**: ' : ''
+      markdown += `- ${breakingPrefix}${change.subject}\n`
     })
     markdown += '\n'
   }
@@ -3586,7 +3587,10 @@ async function getChangelog(options) {
       throw new Error('Version is required')
     }
     
-    const rushRootPath = path.join(process.env.GITHUB_WORKSPACE, workingDirectory || '.')
+    // In GitHub Actions, process.cwd() returns the action's internal directory, not the user's repository
+    // Use GITHUB_WORKSPACE environment variable when available, fall back to process.cwd() for local testing
+    const repositoryRoot = process.env.GITHUB_WORKSPACE || process.cwd()
+    const rushRootPath = path.join(repositoryRoot, workingDirectory || '.')
 
     // Find the project folder
     const projectFolder = findProjectFolder(projectName, rushRootPath)
