@@ -3586,7 +3586,7 @@ async function getChangelog(options) {
       throw new Error('Version is required')
     }
     
-    const rushRootPath = path.join(process.cwd(), workingDirectory || '.')
+    const rushRootPath = path.join(process.env.GITHUB_WORKSPACE, workingDirectory || '.')
 
     // Find the project folder
     const projectFolder = findProjectFolder(projectName, rushRootPath)
