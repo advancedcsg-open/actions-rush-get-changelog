@@ -7,7 +7,7 @@ async function run() {
     const options = {
       version: core.getInput('version'),
       projectName: core.getInput('project-name'),
-      rushPath: process.cwd()
+      workingDirectory: core.getInput('working-directory') || process.cwd()
     }
     const markdown = await getChangeLog(options)
 

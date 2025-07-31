@@ -8,7 +8,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-1',
       version: '0.8.13',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     const markdown = await getChangelog(options)
@@ -24,7 +24,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-1',
       version: '0.8.12',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     const markdown = await getChangelog(options)
@@ -40,7 +40,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-1',
       version: '0.8.11',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     const markdown = await getChangelog(options)
@@ -54,7 +54,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-2',
       version: '1.2.0',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     const markdown = await getChangelog(options)
@@ -70,7 +70,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/non-existent',
       version: '1.0.0',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     await expect(getChangelog(options)).rejects.toThrow('Project with name "@advanced/non-existent" not found in rush.json')
@@ -80,7 +80,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-1',
       version: '999.999.999',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     await expect(getChangelog(options)).rejects.toThrow('Version "999.999.999" not found in changelog')
@@ -89,7 +89,7 @@ describe('get-changelog', () => {
   it('should throw error for missing project name', async () => {
     const options = {
       version: '1.0.0',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     await expect(getChangelog(options)).rejects.toThrow('Project name is required')
@@ -98,7 +98,7 @@ describe('get-changelog', () => {
   it('should throw error for missing version', async () => {
     const options = {
       projectName: '@advanced/example-1',
-      rushPath: fixturesPath
+      workingDirectory: fixturesPath
     }
     
     await expect(getChangelog(options)).rejects.toThrow('Version is required')
@@ -108,7 +108,7 @@ describe('get-changelog', () => {
     const options = {
       projectName: '@advanced/example-1',
       version: '1.0.0',
-      rushPath: '/invalid/path'
+      workingDirectory: '/invalid/path'
     }
     
     await expect(getChangelog(options)).rejects.toThrow('Cannot detect rush.json file')

@@ -3401,45 +3401,6 @@ const path = __nccwpck_require__(17)
 const { readJsonFile, fileExists, findProjectByName } = __nccwpck_require__(121)
 
 /**
- * Interface for rush.json project structure
- * @typedef {Object} RushProject
- * @property {string} packageName - The NPM package name
- * @property {string} projectFolder - The relative path to the project folder
- */
-
-/**
- * Interface for rush.json structure
- * @typedef {Object} RushJson
- * @property {RushProject[]} projects - Array of projects
- */
-
-/**
- * Interface for changelog comment
- * @typedef {Object} ChangelogComment
- * @property {string} comment - The comment text
- */
-
-/**
- * Interface for changelog entry
- * @typedef {Object} ChangelogEntry
- * @property {string} version - The version number
- * @property {string} tag - The git tag
- * @property {string} date - The release date
- * @property {Object} comments - Comments organized by type
- * @property {ChangelogComment[]} [comments.none] - None comments
- * @property {ChangelogComment[]} [comments.patch] - Patch comments
- * @property {ChangelogComment[]} [comments.minor] - Minor comments
- * @property {ChangelogComment[]} [comments.major] - Major comments
- */
-
-/**
- * Interface for CHANGELOG.json structure
- * @typedef {Object} ChangelogJson
- * @property {string} name - The package name
- * @property {ChangelogEntry[]} entries - Array of changelog entries
- */
-
-/**
  * Metadata for different types of changes
  */
 const changeTypeMeta = [
@@ -3457,14 +3418,14 @@ const changeTypeMeta = [
 
 /**
  * Finds the rush.json file and parses it
- * @param {string} rushPath - The path to search for rush.json (defaults to current directory)
+ * @param {string} workingDirectory - The path to search for rush.json (defaults to current directory)
  * @returns {RushJson|null} - The parsed rush.json or null if not found
  */
-function findRushJson(rushPath = './') {
-  const rushJsonPath = __nccwpck_require__.ab + "actions-rush-get-changelog/" + rushPath + '/rush.json'
-  
+function findRushJson(workingDirectory) {
+  const rushJsonPath = __nccwpck_require__.ab + "actions-rush-get-changelog/" + workingDirectory + '/rush.json'
+
   if (!fileExists(rushJsonPath)) {
-    throw new Error(`Cannot detect rush.json file at ${rushPath}`)
+    throw new Error(`Cannot detect rush.json file at ${rushJsonPath}. Please ensure the working-directory input points to the directory containing rush.json, or that rush.json exists in the repository root.`)
   }
   
   const rushJson = readJsonFile(rushJsonPath)
@@ -3478,18 +3439,18 @@ function findRushJson(rushPath = './') {
 /**
  * Finds a project's folder path by its package name
  * @param {string} projectName - The package name to search for
- * @param {string} rushPath - The path containing rush.json
+ * @param {string} workingDirectory - The path containing rush.json
  * @returns {string} - The absolute path to the project folder
  */
-function findProjectFolder(projectName, rushPath = './') {
-  const rushJson = findRushJson(rushPath)
+function findProjectFolder(projectName, workingDirectory) {
+  const rushJson = findRushJson(workingDirectory)
   const project = findProjectByName(rushJson, projectName)
   
   if (!project) {
     throw new Error(`Project with name "${projectName}" not found in rush.json`)
   }
   
-  return path.resolve(rushPath, project.projectFolder)
+  return path.resolve(workingDirectory, project.projectFolder)
 }
 
 /**
@@ -3610,12 +3571,12 @@ function convertToMarkdown(changelogEntry, projectName) {
  * @param {Object} options - The options object
  * @param {string} options.projectName - The name of the project
  * @param {string} options.version - The version to get changelog for
- * @param {string} [options.rushPath] - The path to rush.json (defaults to current directory)
+ * @param {string} [options.workingDirectory] - The path to rush.json (defaults to current directory)
  * @returns {Promise<string>} - The markdown formatted changelog
  */
 async function getChangelog(options) {
   try {
-    const { projectName, version, rushPath = './' } = options
+    const { projectName, version, workingDirectory = './' } = options
     
     if (!projectName) {
       throw new Error('Project name is required')
@@ -3626,7 +3587,7 @@ async function getChangelog(options) {
     }
     
     // Find the project folder
-    const projectFolder = findProjectFolder(projectName, rushPath)
+    const projectFolder = findProjectFolder(projectName, workingDirectory)
     
     // Read the CHANGELOG.json
     const changelog = readChangelogJson(projectFolder)
@@ -3805,7 +3766,7 @@ async function run() {
     const options = {
       version: core.getInput('version'),
       projectName: core.getInput('project-name'),
-      rushPath: process.cwd()
+      workingDirectory: core.getInput('working-directory') || process.cwd()
     }
     const markdown = await getChangeLog(options)
 
