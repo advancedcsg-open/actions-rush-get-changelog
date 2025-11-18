@@ -27,7 +27,7 @@
   "homepage": "https://github.com/advancedcsg-open/actions-rush-get-changelog#readme",
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "glob": "11.0.3"
+    "glob": "12.0.0"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.34.0",
